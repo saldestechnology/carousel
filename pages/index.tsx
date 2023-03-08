@@ -16,18 +16,8 @@ export default function Home({ data }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="container">
-        <Carousel data={data} />
+        <Carousel />
       </div>
     </>
   );
-}
-
-export async function getServerSideProps() {
-  const res = await fetch(`${baseUrl}/api/cars`);
-  const data = await res.json();
-  return {
-    props: {
-      data,
-    },
-  };
 }

@@ -3,12 +3,9 @@ import { baseUrl } from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import Item from "./Item";
+import cars from "../../pages/api/cars.json";
 
-interface HomeProps {
-  data: Car[];
-}
-
-export default function Carousel({ data }: HomeProps) {
+export default function Carousel() {
   const ref = useRef<HTMLDivElement>(null);
   const { width } = useWindowSize();
   const [max_images, _] = useState<number>(4);
@@ -26,10 +23,8 @@ export default function Carousel({ data }: HomeProps) {
     setItems([last, ...result]);
   };
   useEffect(() => {
-    setItems(data);
-    if (width && width <= 712) {
-    }
-  }, [data, width]);
+    setItems(cars);
+  }, [width]);
   return (
     <div className="container">
       <div ref={ref} className="slideshow">
@@ -71,7 +66,7 @@ export default function Carousel({ data }: HomeProps) {
           transition: ease all 1s;
         }
         .slideshow {
-          display: flex;
+          display: -webkit-box;
           height: 100%;
           width: 100%;
           touch-action: pan-y;
@@ -117,14 +112,4 @@ export default function Carousel({ data }: HomeProps) {
       `}</style>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const res = await fetch(`${baseUrl}/api/cars`);
-  const data = await res.json();
-  return {
-    props: {
-      data,
-    },
-  };
 }
