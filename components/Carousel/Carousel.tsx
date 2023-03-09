@@ -12,13 +12,47 @@ export default function Carousel() {
   const [items, setItems] = useState<Car[]>([]);
   const [current, setCurrent] = useState<number>(0);
 
+  const [touchStart, setTouchStart] = useState<number>(0);
+  const [touchEnd, setTouchEnd] = useState<number>(0);
+
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setTouchEnd(0);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) =>
+    setTouchEnd(e.targetTouches[0].clientX);
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    if (touchStart - touchEnd > 50) next();
+    if (touchStart - touchEnd < 50) previous();
+    // add your conditional logic here
+  };
+  console.log({ current });
+  const handleDots = (n: number) => {
+    if (n < 0) {
+      setCurrent(cars.length - 1);
+      return;
+    }
+    if (n > cars.length) {
+      setCurrent(0);
+      return;
+    }
+    setCurrent(n);
+  };
+
   const next = () => {
+    console.log("next");
+    handleDots(current + 1);
     let result = [...items];
     let first = result.shift() as Car;
     result.push(first);
     setItems(result);
   };
   const previous = () => {
+    console.log("previous");
+    handleDots(current - 1 || 0);
     let result = [...items];
     let last = result.pop() as Car;
     setItems([last, ...result]);
@@ -27,7 +61,12 @@ export default function Carousel() {
     setItems(cars);
   }, [width]);
   return (
-    <div className="container">
+    <div
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      className="container"
+    >
       <div ref={ref} className="slideshow">
         {items.slice(0, max_images).map((item, i) => {
           return <Item key={item.id} item={item} />;
@@ -62,7 +101,6 @@ export default function Carousel() {
           display: -webkit-box;
           height: 100%;
           width: 100%;
-          touch-action: pan-y;
         }
         .controls {
           display: flex;
