@@ -3,7 +3,7 @@ import { baseUrl } from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import Item from "./Item";
-import cars from "../../pages/api/cars.json";
+import cars from "./cars.json";
 
 export default function Carousel() {
   const ref = useRef<HTMLDivElement>(null);
