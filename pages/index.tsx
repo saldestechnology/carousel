@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { baseUrl } from "@/utils/api";
 import { Carousel } from "@/components/Carousel";
 
 interface HomeProps {
