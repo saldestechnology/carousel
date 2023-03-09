@@ -1,15 +1,16 @@
 import useWindowSize from "@/hooks/useWindowSize";
-import { baseUrl } from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import Item from "./Item";
 import cars from "./cars.json";
+import Dot from "./Dot";
 
 export default function Carousel() {
   const ref = useRef<HTMLDivElement>(null);
   const { width } = useWindowSize();
   const [max_images, _] = useState<number>(4);
   const [items, setItems] = useState<Car[]>([]);
+  const [current, setCurrent] = useState<number>(0);
 
   const next = () => {
     let result = [...items];
@@ -34,16 +35,8 @@ export default function Carousel() {
       </div>
       <div className="controls">
         <div className="dots">
-          {items.map((dot) => (
-            <div
-              key={dot.id}
-              style={{
-                height: 8,
-                width: 8,
-                background: "#000",
-                borderRadius: 10,
-              }}
-            />
+          {items.map(({ id }, i) => (
+            <Dot active={i === current} key={id} />
           ))}
         </div>
         <button onClick={previous}>
